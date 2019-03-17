@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- <title>Home</title> -->
+	{% if title %}
+	<title>{{ title }}</title>
+	{% else %}
+	<title> a to z products </title>
+	{% endif %}
+</head>
+<body>
+
+	<h1> Welcome to my amazon!</h1>
+
+	{% if name %}
+	<p> {{ name }}</p>
+	{% else %}
+	<p>user</p>
+	{% endif %}
+
+</body>
+<footer>Copyrights reserved</footer>
+</html>
