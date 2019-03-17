@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
-	<!-- <title>Home</title> -->
-	{% if title %}
+ -->	<!-- <title>Home</title> -->
+<!-- 	{% if title %}
 	<title>{{ title }}</title>
 	{% else %}
 	<title> a to z products </title>
@@ -21,3 +21,23 @@
 </body>
 <footer>Copyrights reserved</footer>
 </html>
+ -->
+
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1> Welcome to my amazon!</h1>
+
+<form action="/login" method="POST">
+
+	Username:<br>
+	<input type="text" name="username" placeholder="enter username here">
+	<br>
+	Password:<br>
+	<input type="password" name="password" placeholder="enter password here">
+	<br><br>
+	<input type="submit" value="Submit">
+</form>
+
+{% endblock body %}
