@@ -29,6 +29,16 @@
 
 <h1> Welcome to my amazon!</h1>
 
+{% if session %}
+
+<p> hello {{session['username']}} </p>
+
+<p> You have logged in as {{session['c_type']}} </p>
+
+<p> <a href="/logout"> Logout </a> </p>
+
+{%else%}
+
 <form action="/login" method="POST">
 
 	Username:<br>
@@ -39,5 +49,33 @@
 	<br><br>
 	<input type="submit" value="Submit">
 </form>
+
+<h1> Create New account? Sign UP </h1>
+
+<form action="/signup" method="POST">
+
+	Username:<br>
+	<input type="text" name="username" placeholder="enter username here">
+	<br>
+	Email:<br>
+	<input type="text" name="email" placeholder="enter username here">
+	<br>
+	Password:<br>
+	<input type="password" name="password" placeholder="enter password here">
+	<br><br>
+	Re-enter Password:<br>
+	<input type="password" name="rpassword" placeholder="Re-enter the password">
+	<br><br>
+
+	<input type="submit" value="SignUP"> <br><br>
+
+	Customer Type:<br>
+	<input type="radio" name="c_type" value="buyer" checked> Buyer 
+	<input type="radio" name="c_type" value="seller" checked> Seller <br>
+
+
+	<br>
+</form>
+{% endif %}
 
 {% endblock body %}
