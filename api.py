@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session # session is special dictionary
-from models.model import user_exists, create_user, login_user
+from models.model import user_exists, create_user, login_user, add_product, product_exists, seller_products, buyer_products, add_to_cart
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hello'
@@ -63,15 +64,16 @@ def signup():
 		user_info['username'] = request.form['username']
 		user_info['email'] = request.form['email']
 		user_info['password'] = request.form['password']
-		user_info['c_type'] = request.form['c_type']
 		rpassword = request.form['rpassword']
-		
+		user_info['c_type'] = request.form['c_type']
+
 		if user_exists(user_info['username']) is False:
 			if user_info['password'] == rpassword:
 				if user_info['c_type'] == 'buyer':
 					user_info['cart'] = []
 				create_user(user_info)
 				session['username'] = user_info['username']
+				session['c_type'] = user_info['c_type']
 				return redirect(url_for('home'))
 				#return render_template('welcome.html', user = user_info['username'])
 			return "Passwords don't match. Re-enter the password accurately"
@@ -79,12 +81,47 @@ def signup():
 	else:
 		return redirect(url_for('home'))
 
+
+@app.route('/seller', methods=['GET','POST'])
+def seller():
+
+	if request.method == 'POST':
+		product_info = {}
+
+		product_info['name'] = request.form['name']
+		product_info['price'] = int(request.form['price'])
+		product_info['seller'] = session['username']
+		product_info['description'] = request.form['description']
+
+		if product_exists(product_info['name']) is False:
+			add_product(product_info)
+			return redirect(url_for('product'))
+		return "product already exists. Go back and enter another product"
+
+
+@app.route('/product')
+def product():
+	#import pdb; pdb.set_trace()
+
+	if session['c_type'] == 'buyer':
+		return render_template('products.html', products=buyer_products())
+	return render_template('products.html', products=seller_products(session['username']))
+
+	#return render_template('products.html')
+
+
+@app.route('/addcart',methods=['POST'])
+def add_cart():
+	product_id = str(request.form['id'])
+	add_to_cart(product_id,session['username'])
+	return redirect(url_for('home'))
+
 @app.route('/logout')
 def logout():
 
 	session.clear()
 	return redirect(url_for('home'))
 
-
 if __name__ == '__main__':
 	app.run(debug=True)
+
