@@ -9,7 +9,7 @@ app.config['SECRET_KEY'] = 'hello'
 @app.route('/') # decorator
 def home():
 	# return "hello world"
-	return render_template('home.html',title="a2z products",name="Developed by Jagan",home = 'home')
+	return render_template('home.html',title="a2z products",name="Developed by Jagan",home='home')
 
 @app.route('/about') # decorator
 def about():
@@ -115,6 +115,21 @@ def add_cart():
 	product_id = str(request.form['id'])
 	add_to_cart(product_id,session['username'])
 	return redirect(url_for('home'))
+
+@app.route('/removecart', methods=['POST'])
+def remove_cart():
+	product_id = str(request.form['id'])
+	remove_from_cart(product_id,session['username'])
+	return redirect(url_for('cart'))
+
+@app.route('/cart')
+def cart():
+
+	temp=cart_info(session['username'])
+	product_info = temp[0]
+	quantity = temp[1]
+	return render_template('cart.html',cart = zip(product_info, quantity))
+
 
 @app.route('/logout')
 def logout():
